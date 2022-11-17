@@ -19,6 +19,19 @@ Furniture::Furniture(long _id, std::string _name, std::string _model, float _cos
 	weight = _weight;
 }
 
+Furniture& Furniture::operator= (Furniture other) {
+	this->id = other.getId();
+	this->name = other.getName();
+	this->model = other.getModel();
+	this->cost = other.getCost();
+	this->color = other.getColor();
+	this->length = other.getLength();
+	this->width = other.getWidth();
+	this->height = other.getHeight();
+	this->weight = other.getWeight();
+	return *this;
+}
+
 void Furniture::setMainInfo(long _id, std::string _name, std::string _model, float _cost) {
 	id = _id;
 	name = _name;
@@ -42,6 +55,7 @@ void Furniture::setLength(short _len) { length = _len; }
 void Furniture::setWidth(short _width) { width = _width; }
 void Furniture::setHeight(short _height) { height = _height; }
 void Furniture::setWeight(int _weight) { weight = _weight; }
+
 
 long Furniture::getId() { return id; }
 std::string Furniture::getName() {return name;}

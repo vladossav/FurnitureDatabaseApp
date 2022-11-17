@@ -1,16 +1,16 @@
 #include "InputHelper.h"
 
 
-long getAndCheckInputInteger(long maxInteger) {
+size_t getAndCheckInputInteger(size_t maxInteger) {
 	string menuNum;
-	long num;
+	size_t num;
 	while (1) {
 		getline(cin, menuNum);
 		if (!int_sign(menuNum) || menuNum.length() == 0) {
 			cout << "Требуется ввести число! Попробуйте снова:" << endl;
 		}
 		else {
-			num = atoi(menuNum.c_str());
+			num = atoll(menuNum.c_str());
 			if (maxInteger != 0 && (num >= maxInteger) || num < 0) {
 				cout << "Некорректный ввод! Попробуйте снова: " << endl;
 				continue;
@@ -19,7 +19,7 @@ long getAndCheckInputInteger(long maxInteger) {
 		}
 	}
 	
-	return atoi(menuNum.c_str());
+	return num;
 }
 
 bool int_sign(const string& s) {
@@ -101,42 +101,27 @@ void makeInputFurnitureProperties(short& length, short& width, short& height, in
 	}
 }
 
+void makeInputCustomerAddress(string& city, string& street, short& buildingNum) {
+	bool flag = true;
+	string propertiesStr;
+	while (flag) {
+		cout << "Введите город, улицу, номер дома через пробел: ";
+		getline(cin, propertiesStr);
+		std::stringstream stream(propertiesStr);
 
-void show(vector<Furniture> fur) {
-	TablePrinter ct(Furniture::TABLE_NAME, 1, Furniture::TABLE_COLUMNS.size());
-	ct.EnableExtendedAsciiChar(false);
-	ct.SetHaveLineNumber(true);
-	ct.SetHaveLineDiv(true);
-	ct.SetHaveColDiv(true);
+		stream >> city >> street;
+		stream >> buildingNum;
 
-	for (int i = 0; i < Furniture::TABLE_COLUMNS.size(); i++) {
-		ct.SetColHeader(i, Furniture::TABLE_COLUMNS[i])
-			.SetColWidth(Furniture::TABLE_COLUMN_SIZE[i], i);
-	}
-
-	for (int k = 0; k < fur.size(); k++) {
-		vector<string> str = fur[k].getStringLine();
-		for (int i = 0; i < str.size(); i++) {
-			ct.Print(str[i]);
-		}
+		if (!stream)
+			cout << "Введенные данные некорректны. Попробуйте снова" << endl;
+		else if (buildingNum < 0)
+			cout << "Введенные данные некорректны. Попробуйте снова" << endl;
+		else flag = false;
 	}
 }
 
-void show(Furniture& fur) {
-	TablePrinter ct(Furniture::TABLE_NAME, 1, Furniture::TABLE_COLUMNS.size());
-	ct.EnableExtendedAsciiChar(false);
-	ct.SetHaveLineNumber(false);
-	ct.SetHaveLineDiv(true);
-	ct.SetHaveColDiv(true);
 
-	for (int i = 0; i < Furniture::TABLE_COLUMNS.size(); i++) {
-		ct.SetColHeader(i, Furniture::TABLE_COLUMNS[i])
-			.SetColWidth(Furniture::TABLE_COLUMN_SIZE[i], i);
-	}
 
-	vector<string> str = fur.getStringLine();
-	for (int i = 0; i < str.size(); i++) {
-		ct.Print(str[i]);
-	}
-}
+
+
 

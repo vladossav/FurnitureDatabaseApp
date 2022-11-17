@@ -4,13 +4,17 @@
 #include "InputHelper.h"
 #include "Furniture.h"
 #include "FurnitureRepository.h"
-
+#include "Customer.h"
+#include "CustomerRepository.h"
+#include "TablePrinter.h"
 
 using namespace std;
 void menu();
 void furnitureEditMenu(FurnitureRepository& furnRepo);
 void furnitureAddMenu(FurnitureRepository& furnRepo);
 void furnitureRemoveMenu(FurnitureRepository& furnRepo);
+void customerAddMenu(CustomerRepository& custRepo);
+
 
 int main() {
 	srand(time(NULL));
@@ -19,6 +23,7 @@ int main() {
 	setlocale(LC_ALL, "ru");
 	
 	FurnitureRepository furnRepo;
+	CustomerRepository customerRepo;
 	
 	bool menuFlag = true;
 	while (menuFlag) {
@@ -45,7 +50,21 @@ int main() {
 			furnitureRemoveMenu(furnRepo);
 			break;
 		}
-			  
+		case 11: { //показать заказчика
+			//show(customerRepo.getAllCustomers());
+			
+			break;
+		}
+		case 12: { //добавить заказчика
+			customerAddMenu(customerRepo);
+			break;
+		}
+		case 13: {//редактировать заказчика
+			break;
+		}
+		case 14: { //удалить заказчика
+			break;
+		}
 		}
 
 
@@ -53,6 +72,31 @@ int main() {
 	}
 	
 	return 0;
+}
+
+void customerAddMenu(CustomerRepository& custRepo) {
+	cout << "\nДобавляем позицию заказчика" << endl;
+	cout << "Введите код заказчика: ";
+	bool flag = true;
+	long code;
+	do {
+		code = getAndCheckInputInteger();
+		if (!custRepo.checkCodeCollision(code)) flag = false;
+	} while (flag);
+	 //код заказчика
+	 
+	string name = getInputString(NAME_CUSTOMER); //название
+	cout << "Введите номер телефона: ";
+	long long phone = getAndCheckInputInteger(89999999999); //телефон
+
+	string city, street;
+	short building;
+	makeInputCustomerAddress(city, street, building); //адрес
+
+	Customer customer(code, name, phone, -1, city, street, building);
+	show(customer);
+	custRepo.addCustomer(customer);
+	cout << "\nОбъект добавлен!";
 }
 
 void furnitureAddMenu(FurnitureRepository& furnRepo) {
@@ -70,6 +114,7 @@ void furnitureAddMenu(FurnitureRepository& furnRepo) {
 
 	Furniture fur(-1, name, model, cost, color, length, width, height, weight);
 	show(fur);
+
 	furnRepo.addFurniture(fur);
 	cout << "Объект добавлен!";
 }
@@ -155,18 +200,20 @@ void menu() {
 	cout << "3. Редактировать" << endl;
 	cout << "4. Удалить" << endl;
 	cout << "                  ЗАКАЗЧИК" << endl;
+	cout << "11. Показать" << endl;
+	cout << "12. Добавить" << endl;
+	cout << "13. Редактировать" << endl;
+	cout << "14. Удалить" << endl;
+	cout << "                  ДОГОВОР" << endl;
 	cout << "21. Показать" << endl;
 	cout << "22. Добавить" << endl;
 	cout << "23. Редактировать" << endl;
 	cout << "24. Удалить" << endl;
-	cout << "                  ДОГОВОР" << endl;
+	cout << "                  ПРОДАЖА" << endl;
 	cout << "31. Показать" << endl;
 	cout << "32. Добавить" << endl;
 	cout << "33. Редактировать" << endl;
 	cout << "34. Удалить" << endl;
-	cout << "                  ПРОДАЖА" << endl;
-	cout << "41. Показать" << endl;
-	cout << "42. Добавить" << endl;
-	cout << "43. Редактировать" << endl;
-	cout << "44. Удалить" << endl;
 }
+
+

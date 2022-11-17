@@ -25,7 +25,7 @@ long FurnitureRepository::genId() {
 	bool flag = false;
 	long num;
 	do {
-		num = rand();
+		num = (long)rand();
 		for (Furniture one : repo) {
 			if (one.getId() == num) {
 				flag = true;

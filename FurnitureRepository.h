@@ -34,5 +34,4 @@ private:
 	FurnitureMapper mapper;
 
 	long genId();
-	
 };

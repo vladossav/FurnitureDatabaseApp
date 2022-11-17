@@ -4,14 +4,15 @@
 
 class Furniture {
 public:
+	static const std::string TABLE_NAME;
 	static const std::vector<std::string> TABLE_COLUMNS;
 	static const std::vector<int> TABLE_COLUMN_SIZE;
-	static const std::string TABLE_NAME;
 
 	Furniture() {}
 	Furniture(long _id, std::string _name, std::string _model, float _cost,
 		std::string _color, short _len, short _width, short _height, int _weight);
 	~Furniture() {}
+	Furniture& operator= (Furniture other);
 
 	long getId();
 	std::string getName();
