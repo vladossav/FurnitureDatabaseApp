@@ -24,7 +24,6 @@ void Database::connect() {
 
 Database::Database() {
 	connect();
-	std::cout << "Successful connection to database!" << std::endl;
 }
 
 Database* Database::instance = nullptr;
@@ -134,11 +133,11 @@ const SQLHSTMT& Database::execute(std::string sqlStr) {
 	SQLRETURN status = SQLExecDirect(hStat, (SQLWCHAR*)str2wchar(sqlStr),
 		SQL_NTS);
 	if (status == SQL_SUCCESS) {
-		std::cout << sqlRetToStr(status) << std::endl;
+		//std::cout << sqlRetToStr(status) << std::endl;
 		return hStat;
 	}
 	else {
-		//std::cout << sqlRetToStr(status) << std::endl;
+		std::cout << sqlRetToStr(status) << std::endl;
 		throw status;
 	}
 	return nullptr;

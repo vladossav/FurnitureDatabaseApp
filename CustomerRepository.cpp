@@ -1,8 +1,7 @@
 #include "CustomerRepository.h"
 
 CustomerRepository::CustomerRepository() {
-	repo = std::vector<Customer>();
-	mapper = CustomerMapper();
+	getAllCustomers();
 }
 
 void CustomerRepository::addCustomer(Customer one) {
@@ -35,7 +34,7 @@ long CustomerRepository::genAddressId() {
 	return num;
 }
 
-bool CustomerRepository::checkCodeCollision(long id) {
+bool CustomerRepository::hasCodeCollision(long id) {
 	bool flag = false;
 	for (Customer one : repo) {
 		if (one.getCode() == id) {

@@ -1,8 +1,7 @@
 #include "FurnitureRepository.h"
 
 FurnitureRepository::FurnitureRepository() {
-	repo = std::vector<Furniture>();
-	mapper = FurnitureMapper();
+	getAllFurniture();
 }
 
 void FurnitureRepository::addFurniture(Furniture one) {

@@ -1,11 +1,10 @@
-//#include <sstream>
-//#include <iostream>
-//#include "Database.h"
 #include "InputHelper.h"
 #include "Furniture.h"
 #include "FurnitureRepository.h"
 #include "Customer.h"
 #include "CustomerRepository.h"
+#include "Contract.h"
+#include "ContractRepository.h"
 #include "TablePrinter.h"
 
 using namespace std;
@@ -16,9 +15,9 @@ void furnitureRemoveMenu(FurnitureRepository& furnRepo);
 void customerAddMenu(CustomerRepository& custRepo);
 void customerEditMenu(CustomerRepository& custRepo);
 void customerRemoveMenu(CustomerRepository& custRepo);
-void contractAddMenu();
-void contractEditMenu();
-void contractRemoveMenu();
+void contractAddMenu(ContractRepository& contractRepo, CustomerRepository& custRepo);
+void contractEditMenu(ContractRepository& contractRepo, CustomerRepository& custRepo);
+void contractRemoveMenu(ContractRepository& contractRepo);
 
 int main() {
 	srand(time(NULL));
@@ -28,6 +27,7 @@ int main() {
 	
 	FurnitureRepository furnRepo;
 	CustomerRepository customerRepo;
+	ContractRepository contractRepo;
 	
 	bool menuFlag = true;
 	while (menuFlag) {
@@ -71,16 +71,19 @@ int main() {
 			break;
 		}
 		case 21: { //показать договоры
-
+			show(contractRepo.getAllContracts());
 			break;
 		}
 		case 22: { //добавить договор
+			contractAddMenu(contractRepo, customerRepo);
 			break;
 		}
 		case 23: { //редактировать
+			contractEditMenu(contractRepo, customerRepo);
 			break;
 		}
 		case 24: { //удалить
+			contractRemoveMenu(contractRepo);
 			break;
 		}
 		default: {
@@ -91,16 +94,114 @@ int main() {
 	return 0;
 }
 
+
+
+void contractAddMenu(ContractRepository& contractRepo, CustomerRepository& custRepo) {
+	cout << "\nДобавление договора" << endl;
+	bool flag = true;
+	long num, code;
+	string regDate, doneDate;
+	do {
+		cout << "Введите номер договора: ";
+		num = getAndCheckInputInteger();
+		if (!contractRepo.hasContractNumberCollision(num)) flag = false;
+		else cout << "Договор с таким номером уже существует!\n";
+	} while (flag); 
+
+	flag = true;
+	do {
+		cout << "Введите код заказчика: ";
+		code = getAndCheckInputInteger();
+		if (custRepo.hasCodeCollision(code)) flag = false;
+		else cout << "Заказчика с таким кодом не существует!\n";
+	} while (flag); 
+
+	cout << "Дата регистрации заказа\n";
+	regDate = getInputDate();
+	cout << "Дата выполнения заказа\n";
+	doneDate = getInputDate();
+
+	Contract contract(num, code, regDate, doneDate);
+	show(contract);
+	contractRepo.addContract(contract);
+}
+
+void contractEditMenu(ContractRepository& contractRepo, CustomerRepository& custRepo) {
+	show(contractRepo.getAllContracts());
+	cout << "\nВведите номер строки для редактирования: ";
+	long num = getAndCheckInputInteger(contractRepo.getSize());
+	Contract contract = contractRepo.getByNum(num);
+
+	bool menuFlag = true;
+	while (menuFlag) {
+		show(contract);
+		cout << "\tВыберите поле для редактирования таблицы ДОГОВОРЫ: " << endl;
+		cout << "1. Код заказчика" << endl;
+		cout << "2. Дата регистрации заказа" << endl;
+		cout << "3. Дата выполнения заказа" << endl;
+		cout << "4. Сохранить изменения и выйти" << endl;
+		cout << "0. Выйти без сохранения" << endl;
+
+		switch (getAndCheckInputInteger()) {
+		case 0: {
+			cout << "\nИзменения не сохранены!" << endl;
+			menuFlag = false;
+			break;
+		}
+		case 1: {
+			bool flag = true;
+			long code;
+			do {
+				cout << "Введите код заказчика: ";
+				code = getAndCheckInputInteger();
+				if (custRepo.hasCodeCollision(code)) flag = false;
+				else cout << "Заказчика с таким кодом не существует!\n";
+			} while (flag);
+			contract.setCustomerCode(code);
+			break;
+		}
+		case 2: {
+			cout << "Дата регистрации заказа\n";
+			string regDate = getInputDate();
+			contract.setRegDate(regDate);
+			break;
+		}
+		case 3: {
+			cout << "Дата выполнения заказа\n";
+			string doneDate = getInputDate();
+			contract.setDoneDate(doneDate);
+			break;
+		}
+		case 4: {
+			contractRepo.updateContract(num, contract);
+			menuFlag = false;
+			cout << "Изменения внесены!";
+			break;
+		}
+		default: {
+			cout << "Введите корректный пункт меню!";
+		}
+		}
+	}
+}
+
+void contractRemoveMenu(ContractRepository& contractRepo) {
+	show(contractRepo.getAllContracts());
+	cout << "\nВведите номер строки для удаления: ";
+	long num = getAndCheckInputInteger(contractRepo.getSize());
+	contractRepo.removeContractById(num);
+	cout << "\nОбъект под номером " << num << " был удалён";
+}
+
 void customerAddMenu(CustomerRepository& custRepo) {
-	cout << "\nДобавляем позицию заказчика" << endl;
-	cout << "Введите код заказчика: ";
+	cout << "\nДобавление заказчика" << endl;
 	bool flag = true;
 	long code;
 	do {
+		cout << "Введите код заказчика: ";
 		code = getAndCheckInputInteger();
-		if (!custRepo.checkCodeCollision(code)) flag = false;
-	} while (flag);
-	 //код заказчика
+		if (!custRepo.hasCodeCollision(code)) flag = false;
+	} while (flag); //код заказчика
 	 
 	string name = getInputString(NAME_CUSTOMER); //название
 	cout << "Введите номер телефона: ";
@@ -227,13 +328,11 @@ void furnitureEditMenu(FurnitureRepository& furnRepo) {
 			break;
 		}
 		case 2: {
-			//модель
 			string model = getInputString(MODEL_FURNITURE);
 			fur.setModel(model);
 			break;
 		}
 		case 3: {
-			//стоимость
 			float cost = getInputCostFurniture();
 			fur.setCost(cost);
 			break;
@@ -270,7 +369,15 @@ void furnitureRemoveMenu(FurnitureRepository& furnRepo) {
 
 
 void menu() {
-	cout << "\n                   Мебель" << endl;
+	cout << "\n         База данных офисной мебели" << endl;
+	cout << "=================== Меню ======================" << endl;
+	cout << "МЕБЕЛЬ\t\tЗАКАЗЧИК\tДОГОВОР\t\tПРОДАЖА" << endl;
+	cout << "1. Показать\t11. Показать\t21. Показать\t31. Показать\t0. Выход" << endl;
+	cout << "2. Добавить\t12. Добавить\t22. Добавить\t32. Добавить" << endl;
+	cout << "3. Править\t13. Править\t23. Править\t33. Править" << endl;
+	cout << "4. Удалить\t14. Удалить\t24. Удалить\t34. Удалить" << endl;
+
+	/*cout << "\n                   Мебель" << endl;
 	cout << "=================== Меню ======================" << endl;
 	cout << "0. Выход" << endl;
 	cout << "                   МЕБЕЛЬ" << endl;
@@ -292,7 +399,7 @@ void menu() {
 	cout << "31. Показать" << endl;
 	cout << "32. Добавить" << endl;
 	cout << "33. Редактировать" << endl;
-	cout << "34. Удалить" << endl;
+	cout << "34. Удалить" << endl;*/
 }
 
 

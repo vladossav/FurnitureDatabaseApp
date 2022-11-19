@@ -1,12 +1,10 @@
 #include "Customer.h"
 #include <string>
-#include <sstream>
 
 const std::string Customer::TABLE_NAME = "Заказчик";
 const std::vector<std::string> Customer::TABLE_COLUMNS = { "Код", "Наименование", "Адрес", "Телефон" };
 const std::vector<int> Customer::TABLE_COLUMN_SIZE = { 8, 25, 50, 12 };
 
-;
 
 Customer::Customer(long _code, std::string _name, std::string phoneNum,
 	long addr_id, std::string _city, std::string _street, short _num_build) {

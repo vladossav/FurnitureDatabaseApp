@@ -19,7 +19,7 @@ string getInputString(typeInputString type);
 float getInputCostFurniture();
 void makeInputFurnitureProperties(short& length, short& width, short& depth, int &weight);
 void makeInputCustomerAddress(string& city, string& street, short &buildingNum);
-
+std::string getInputDate();
 
 template <class T>
 void show(vector<T> table) {

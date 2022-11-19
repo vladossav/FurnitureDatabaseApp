@@ -83,7 +83,7 @@ std::vector<Customer> CustomerMapper::selectAll() {
 			}
 			else {
 				if (retcode != SQL_NO_DATA) {
-					std::cout << "Не удалось загрузить мебель из БД!\n";
+					std::cout << "Не удалось загрузить заказчиков из БД!\n";
 				}
 				break;
 			}

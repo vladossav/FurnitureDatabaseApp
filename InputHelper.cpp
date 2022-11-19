@@ -116,8 +116,42 @@ void makeInputCustomerAddress(string& city, string& street, short& buildingNum) 
 	}
 }
 
+bool isValidDate(short day, short month, short year) {
+	short days_in_month[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
 
+	if (year < 2020 || year > 2050) return false;
+	if (year % 4 == 0)
+		days_in_month[2] = 29;
+	if ((month < 1) || (month > 12))
+		return false;
+	if ((day < 1) || (day > days_in_month[month]))
+		return false;
 
+	return true;
+}
 
+std::string getInputDate() {
+	bool flag = true;
+	string inputDate;
+	short day, month, year;
+	while (flag) {
+		cout << "Введите день, месяц, год в формате ДД ММ ГГГГ (через пробел): ";
+		getline(cin, inputDate);
+		std::stringstream stream(inputDate);
 
+		stream >> day >> month >> year;
 
+		if (!stream)
+			cout << "Введенные данные некорректны. Попробуйте снова" << endl;
+		else if (!isValidDate(day,month,year))
+			cout << "Введенные данные некорректны. Попробуйте снова" << endl;
+		else flag = false;
+	}
+	char date[12];
+	string format = "%hd.%hd.%hd";
+	if (day < 10) format = "0%hd.%hd.%hd";
+	if (month < 10) format = "%hd.0%hd.%hd";
+	if (day < 10 && month < 10) format = "0%hd.0%hd.%hd";
+	snprintf(date, sizeof(date), format.c_str(), day, month, year);
+	return date;
+}
