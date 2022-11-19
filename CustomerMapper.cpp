@@ -4,12 +4,12 @@
 
 void CustomerMapper::insert(Customer& obj) {
 	char request1[512];
-	snprintf(request1, 512, "insert into customer values (%ld, '%s', %ld, %lld);",
-		obj.getCode(), obj.getName().c_str(), obj.getAddressId(), obj.getPhoneNum());
-
-	char request2[512];
-	snprintf(request2, 512, "insert into address values (%ld, '%s', '%s', %hd);",
+	snprintf(request1, 512, "insert into address values (%ld, '%s', '%s', %hd);",
 		obj.getAddressId(), obj.getCity().c_str(), obj.getStreet().c_str(), obj.getNumBuilding());
+	char request2[512];
+	snprintf(request2, 512, "insert into customer values (%ld, '%s', %ld, '%s');",
+		obj.getCode(), obj.getName().c_str(), obj.getAddressId(), obj.getPhoneNum().c_str());
+	std::cout << request2;
 
 	try {
 		Database::getInstance()->execute(request1);
@@ -24,25 +24,30 @@ void CustomerMapper::insert(Customer& obj) {
 }
 
 void CustomerMapper::removeById(long id) {
-	char request[64];
-	snprintf(request, 64, "delete from customer where id = %ld", id);
+	char request[256];
+	snprintf(request, 256, "delete from address using customer where code = '%ld' and id = address_id;", id);
 	try {
 		Database::getInstance()->execute(request);
-		return;
 	}
 	catch (SQLRETURN sqlRet) {
+		if (sqlRet == SQL_ERROR) {
+			std::cout << "Ошибка удаления БД";
+			return;
+		}
 		return;
 	}
 }
 
 void CustomerMapper::update(Customer& obj) {
-	char request[512];
-	
-	snprintf(request, 512,
-		"update customer set name='%s', model='%s',cost='%s',color='%s', length='%hd',width='%hd',height='%hd',weight='%d' where id = %ld;",
-		obj.getName().c_str() );
+	char request1[512];
+	snprintf(request1, 512, "update address set city='%s', street='%s', n_build=%hd where id = %ld;",
+		obj.getCity().c_str(), obj.getStreet().c_str(), obj.getNumBuilding(), obj.getAddressId());
+	char request2[512];
+	snprintf(request2, 512, "update customer set name='%s', phone_num='%s' where code = %ld;",
+		obj.getName().c_str(), obj.getPhoneNum().c_str(), obj.getCode());
 	try {
-		Database::getInstance()->execute(request);
+		Database::getInstance()->execute(request1);
+		Database::getInstance()->execute(request2);
 	}
 	catch (SQLRETURN sqlRet) {
 		if (sqlRet == SQL_ERROR) {
@@ -61,7 +66,7 @@ std::vector<Customer> CustomerMapper::selectAll() {
 		retcode = SQLBindCol(statement, 1, SQL_C_LONG, &code, CODE_SIZE, nullptr);
 		retcode = SQLBindCol(statement, 2, SQL_C_CHAR, &name, NAME_SIZE, nullptr);
 		retcode = SQLBindCol(statement, 3, SQL_C_LONG, &address_id, ADDRESS_ID_SIZE, nullptr);
-		retcode = SQLBindCol(statement, 4, SQL_BIGINT, &phone, PHONE_SIZE, nullptr);
+		retcode = SQLBindCol(statement, 4, SQL_C_CHAR, &phone, PHONE_SIZE, nullptr);
 		retcode = SQLBindCol(statement, 6, SQL_C_CHAR, &city, CITY_SIZE, nullptr);
 		retcode = SQLBindCol(statement, 7, SQL_C_CHAR, &street, STREET_SIZE, nullptr);
 		retcode = SQLBindCol(statement, 8, SQL_C_SHORT, &num_building, BUILDING_SIZE, nullptr);
@@ -72,7 +77,7 @@ std::vector<Customer> CustomerMapper::selectAll() {
 				Customer obj;
 				obj.setCode(code);
 				obj.setName(reinterpret_cast<char*>(name));
-				obj.setPhoneNum(phone);
+				obj.setPhoneNum(reinterpret_cast<char*>(phone));
 				obj.setAddress(address_id, reinterpret_cast<char*>(city), reinterpret_cast<char*>(street), num_building);
 				customer.push_back(obj);
 			}

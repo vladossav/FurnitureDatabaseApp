@@ -20,13 +20,13 @@ void CustomerRepository::removeCustomerById(long id) {
 	repo.erase(repo.begin() + id);
 }
 
-long CustomerRepository::genId() {
+long CustomerRepository::genAddressId() {
 	bool flag = false;
 	long num;
 	do {
 		num = (long)rand();
 		for (Customer one : repo) {
-			if (one.getCode() == num) {
+			if (one.getAddressId() == num) {
 				flag = true;
 				break;
 			}

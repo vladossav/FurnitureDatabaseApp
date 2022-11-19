@@ -44,10 +44,6 @@ string getInputString(typeInputString type) {
 	case NAME_CUSTOMER:
 		out = "наименование заказчика: ";
 		break;
-	case STREET:
-		break;
-	case CITY:
-		break;
 	default:
 		break;
 	}

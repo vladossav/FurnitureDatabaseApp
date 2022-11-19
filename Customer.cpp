@@ -4,11 +4,11 @@
 
 const std::string Customer::TABLE_NAME = "Заказчик";
 const std::vector<std::string> Customer::TABLE_COLUMNS = { "Код", "Наименование", "Адрес", "Телефон" };
-const std::vector<int> Customer::TABLE_COLUMN_SIZE = { 8, 20, 40, 12 };
+const std::vector<int> Customer::TABLE_COLUMN_SIZE = { 8, 25, 50, 12 };
 
 ;
 
-Customer::Customer(long _code, std::string _name, long long phoneNum, 
+Customer::Customer(long _code, std::string _name, std::string phoneNum,
 	long addr_id, std::string _city, std::string _street, short _num_build) {
 	code = _code;
 	name = _name;
@@ -24,13 +24,13 @@ std::vector<std::string> Customer::getStringLine() {
 	arr.push_back(std::to_string(code));
 	arr.push_back(name);
 	arr.push_back("г. " + city+", ул. "+ street +" " + std::to_string(numBuilding));
-	arr.push_back(std::to_string(phone_num));
+	arr.push_back(phone_num);
 	return arr;
 }
 
 long Customer::getCode() { return code; }
 std::string Customer::getName() { return name; }
-long long Customer::getPhoneNum() { return phone_num; }
+std::string Customer::getPhoneNum() { return phone_num; }
 long Customer::getAddressId() { return address_id; }
 std::string Customer::getCity() { return city; }
 std::string Customer::getStreet() { return street; }
@@ -38,7 +38,7 @@ short Customer::getNumBuilding() { return numBuilding; }
 
 void Customer::setCode(long id) { code = id; }
 void Customer::setName(std::string _name) { name = _name; }
-void Customer::setPhoneNum(long long _phone) { phone_num = _phone; }
+void Customer::setPhoneNum(std::string _phone) { phone_num = _phone; }
 void Customer::setAddress(long addr_id, std::string _city, std::string _street, short num_build) {
 	address_id = addr_id;
 	city = _city;

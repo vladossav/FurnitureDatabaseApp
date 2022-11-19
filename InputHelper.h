@@ -10,8 +10,7 @@ using namespace std;
 
 enum typeInputString {
 	NAME_FURNITURE, MODEL_FURNITURE, COLOR_FURNITURE, 
-	NAME_CUSTOMER, 
-	STREET, CITY
+	NAME_CUSTOMER
 };
 
 size_t getAndCheckInputInteger(size_t maxInteger = 0);

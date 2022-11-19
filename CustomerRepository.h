@@ -20,10 +20,10 @@ public:
 	void updateCustomer(long id, Customer one);
 	void removeCustomerById(long id);
 	bool checkCodeCollision(long id);
-
+	long genAddressId();
 private:
 	std::vector<Customer> repo;
 	CustomerMapper mapper;
 
-	long genId();
+	
 };

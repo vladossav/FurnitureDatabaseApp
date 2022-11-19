@@ -14,7 +14,11 @@ void furnitureEditMenu(FurnitureRepository& furnRepo);
 void furnitureAddMenu(FurnitureRepository& furnRepo);
 void furnitureRemoveMenu(FurnitureRepository& furnRepo);
 void customerAddMenu(CustomerRepository& custRepo);
-
+void customerEditMenu(CustomerRepository& custRepo);
+void customerRemoveMenu(CustomerRepository& custRepo);
+void contractAddMenu();
+void contractEditMenu();
+void contractRemoveMenu();
 
 int main() {
 	srand(time(NULL));
@@ -51,8 +55,7 @@ int main() {
 			break;
 		}
 		case 11: { //показать заказчика
-			//show(customerRepo.getAllCustomers());
-			
+			show(customerRepo.getAllCustomers());
 			break;
 		}
 		case 12: { //добавить заказчика
@@ -60,17 +63,31 @@ int main() {
 			break;
 		}
 		case 13: {//редактировать заказчика
+			customerEditMenu(customerRepo);
 			break;
 		}
 		case 14: { //удалить заказчика
+			customerRemoveMenu(customerRepo);
 			break;
 		}
+		case 21: { //показать договоры
+
+			break;
 		}
-
-
-
+		case 22: { //добавить договор
+			break;
+		}
+		case 23: { //редактировать
+			break;
+		}
+		case 24: { //удалить
+			break;
+		}
+		default: {
+			cout << "Введен некорректный пункт меню!";
+		}
+		}
 	}
-	
 	return 0;
 }
 
@@ -87,17 +104,79 @@ void customerAddMenu(CustomerRepository& custRepo) {
 	 
 	string name = getInputString(NAME_CUSTOMER); //название
 	cout << "Введите номер телефона: ";
-	long long phone = getAndCheckInputInteger(89999999999); //телефон
+	string phone = std::to_string(getAndCheckInputInteger(89999999999)); //телефон
 
 	string city, street;
 	short building;
 	makeInputCustomerAddress(city, street, building); //адрес
-
-	Customer customer(code, name, phone, -1, city, street, building);
+	
+	Customer customer(code, name, phone, custRepo.genAddressId(), city, street, building);
 	show(customer);
 	custRepo.addCustomer(customer);
 	cout << "\nОбъект добавлен!";
 }
+
+void customerEditMenu(CustomerRepository& custRepo) {
+	show(custRepo.getAllCustomers());
+	cout << "\nВведите номер строки для редактирования: ";
+	long num = getAndCheckInputInteger(custRepo.getSize());
+	Customer customer = custRepo.getByNum(num);
+
+	bool menuFlag = true;
+	while (menuFlag) {
+		show(customer);
+		cout << "\tВыберите поле для редактирования таблицы ЗАКАЗЧИКИ: " << endl;
+		cout << "1. Наименование заказчика" << endl;
+		cout << "2. Адрес заказчика" << endl;
+		cout << "3. Номер телефона заказчика" << endl;
+		cout << "4. Сохранить изменения и выйти" << endl;
+		cout << "0. Выйти без сохранения" << endl;
+
+		switch (getAndCheckInputInteger()) {
+		case 0: {
+			cout << "\nИзменения не сохранены!" << endl;
+			menuFlag = false;
+			break;
+		}
+		case 1: {
+			string name = getInputString(NAME_CUSTOMER);
+			customer.setName(name);
+			break;
+		}
+		case 2: {
+			string city, street;
+			short building;
+			makeInputCustomerAddress(city, street, building); 
+			customer.setAddress(customer.getAddressId(), city, street, building);
+			break;
+		}
+		case 3: {
+			cout << "Введите номер телефона: ";
+			string phone = std::to_string(getAndCheckInputInteger(89999999999)); //телефон
+			customer.setPhoneNum(phone);
+			break;
+		}
+		case 4: {
+			custRepo.updateCustomer(num, customer);
+			menuFlag = false;
+			cout << "Изменения внесены!";
+			break;
+		}
+		default: {
+			cout << "Введите корректный пункт меню!";
+		}
+		}
+	}
+}
+
+void customerRemoveMenu(CustomerRepository& custRepo) {
+	show(custRepo.getAllCustomers());
+	cout << "\nВведите номер строки для удаления: ";
+	long num = getAndCheckInputInteger(custRepo.getSize());
+	custRepo.removeCustomerById(num);
+	cout << "\nОбъект под номером " << num << " был удалён";
+}
+
 
 void furnitureAddMenu(FurnitureRepository& furnRepo) {
 	cout << "\nДобавляем позицию мебели" << endl;

@@ -5,7 +5,7 @@
 
 #define CODE_SIZE sizeof(long)
 #define NAME_SIZE 64
-#define PHONE_SIZE sizeof(long long)
+#define PHONE_SIZE 16
 #define STREET_SIZE 32
 #define CITY_SIZE 32
 #define BUILDING_SIZE sizeof(short)
@@ -24,7 +24,7 @@ public:
 private:
 	SQLINTEGER code;
 	SQLCHAR name[NAME_SIZE];
-	SQLBIGINT phone;
+	SQLCHAR phone[PHONE_SIZE];
 
 	SQLINTEGER address_id;
 	SQLCHAR city[CITY_SIZE];

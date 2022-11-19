@@ -10,12 +10,12 @@ public:
 	static const std::vector<int> TABLE_COLUMN_SIZE;
 
 	Customer() {}
-	Customer(long _code, std::string _name, long long phoneNum, long addr_id, std::string _city, std::string _street, short _num_build);
+	Customer(long _code, std::string _name, std::string phoneNum, long addr_id, std::string _city, std::string _street, short _num_build);
 	~Customer() {}
 
 	long getCode();
 	std::string getName();
-	long long getPhoneNum();
+	std::string getPhoneNum();
 	long getAddressId();
 	std::string getCity();
 	std::string getStreet();
@@ -24,7 +24,7 @@ public:
 	void setCode(long id);
 	void setName(std::string name);
 	void setAddress(long address_id, std::string _city, std::string _street, short _num_build);
-	void setPhoneNum(long long phone);
+	void setPhoneNum(std::string phone);
 
 	std::vector<std::string> getStringLine();
 
@@ -35,5 +35,5 @@ private:
 	std::string city;
 	std::string street;
 	short numBuilding;
-	long long phone_num;
+	std::string phone_num;
 };
