@@ -2,8 +2,8 @@
 #include <string>
 
 const std::string Contract::TABLE_NAME = "Договор";
-const std::vector<std::string> Contract::TABLE_COLUMNS = { "№", "Код", "Дата рег.", "Дата вып." };
-const std::vector<int> Contract::TABLE_COLUMN_SIZE = { 8, 8, 20, 20 };
+const std::vector<std::string> Contract::TABLE_COLUMNS = { "№", "Код заказчика", "Дата оформления", "Дата исполнения" };
+const std::vector<int> Contract::TABLE_COLUMN_SIZE = { 8, 15, 20, 20 };
 
 Contract::Contract(long num, long customerCode, std::string regDate, std::string doneDate) {
 	number = num;

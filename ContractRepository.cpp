@@ -19,8 +19,6 @@ void ContractRepository::removeContractById(long id) {
 	repo.erase(repo.begin() + id);
 }
 
-
-
 bool ContractRepository::hasContractNumberCollision(long id) {
 	bool flag = false;
 	for (Contract one : repo) {

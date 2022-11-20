@@ -23,10 +23,14 @@ std::string getInputDate();
 
 template <class T>
 void show(vector<T> table) {
+	
 	string tableName = T::TABLE_NAME;
 	vector<string> columnNames = T::TABLE_COLUMNS;
 	vector<int> columnSize = T::TABLE_COLUMN_SIZE;
-
+	if (table.empty()) {
+		cout << "\nДанных не найдено! Taблица " << tableName << " пуста\n";
+		return;
+	}
 	TablePrinter ct(tableName, 1, columnNames.size());
 	ct.EnableExtendedAsciiChar(false);
 	ct.SetHaveLineNumber(true);
