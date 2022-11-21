@@ -12,7 +12,6 @@ public:
 	}
 
 	std::vector<Customer> getAllCustomers();
-	Customer* getById(long id);
 	Customer& getByNum(long id);
 	long getSize();
 

@@ -12,7 +12,6 @@ public:
 	}
 
 	std::vector<Sale> getAllSales();
-	Sale* getById(long id);
 	Sale& getByNum(long id);
 	long getSize();
 	long genId();

@@ -4,7 +4,7 @@
 
 const std::string Furniture::TABLE_NAME = "Мебель";
 const std::vector<std::string> Furniture::TABLE_COLUMNS = { "Название", "Модель", "Стоимость", "Цвет", "Длина", "Ширина", "Высота", "Вес" };
-const std::vector<int> Furniture::TABLE_COLUMN_SIZE = { 25, 15, 10, 15, 7, 7, 7, 10 };
+const std::vector<int> Furniture::TABLE_COLUMN_SIZE = { 22, 15, 10, 20, 7, 7, 7, 10 };
 
 Furniture::Furniture(long _id, std::string _name, std::string _model, float _cost, std::string _color, short _len, short _width, short _height, int _weight)
 {

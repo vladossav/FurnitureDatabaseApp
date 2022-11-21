@@ -87,45 +87,75 @@ Database* Database::getInstance()
 }
 
 void Database::createTables() {
-	// создание таблиц студентов
 	SQLRETURN status = SQLExecDirect(hStat,
-		(SQLWCHAR*)L"create table if not exist student (\
-		id integer,\
-		name varchar(255),\
-		faculty varchar(10),\
-		stud_group varchar(10),\
-		primary key(id)\
+		(SQLWCHAR*)L"CREATE TABLE IF NOT EXISTS address (\
+			id integer,\
+			city character varying,\
+			street character varying,\
+			n_build smallint,\
+			CONSTRAINT address_pkey PRIMARY KEY(id)\
+			); ",
+		SQL_NTS);
+	status = SQLExecDirect(hStat,
+		(SQLWCHAR*)L"CREATE TABLE IF NOT EXISTS customer (\
+			code integer,\
+			name character varying,\
+			address_id integer,\
+			phone_num character varying,\
+			CONSTRAINT customer_pkey PRIMARY KEY(code),\
+			CONSTRAINT customer_address_id_fkey FOREIGN KEY(address_id)\
+			REFERENCES address(id) MATCH SIMPLE\
+			ON UPDATE NO ACTION\
+			ON DELETE CASCADE\
+			NOT VALID\
 		);",
 		SQL_NTS);
-	// создание таблиц преподавателей
 	status = SQLExecDirect(hStat,
-		(SQLWCHAR*)L"create table if not exist mark (\
-		create table if not exist teacher (\
-		id integer,\
-		name varchar(255),\
-		degree varchar(64),\
-		title varchar(64),\
-		department varchar(64),\
-		telephone varchar(20),\
-		email varchar(64),\
-		primary key(id)\
-		);",
+		(SQLWCHAR*)L"CREATE TABLE IF NOT EXISTS contract (\
+			number integer,\
+			customer_code integer,\
+			reg_date character varying,\
+			done_date character varying,\
+			CONSTRAINT contract_pkey PRIMARY KEY(number),\
+			CONSTRAINT contract_customer_code_fkey FOREIGN KEY(customer_code)\
+			REFERENCES customer(code) MATCH SIMPLE\
+			ON UPDATE NO ACTION\
+			ON DELETE CASCADE\
+			NOT VALID\
+			);",
 		SQL_NTS);
-	// создание таблиц оценок
 	status = SQLExecDirect(hStat,
-		(SQLWCHAR*)L"create table if not exist mark (\
-		id_stud integer references student(id) unique,\
-		exam_mark integer,\
-		grad_mark integer\
-		);",
+		(SQLWCHAR*)L"CREATE TABLE IF NOT EXISTS furniture(\
+			id integer,\
+			name character varying,\
+			model character varying,\
+			cost double precision,\
+			color character varying,\
+			length smallint,\
+			width smallint,\
+			height smallint,\
+			weight integer,\
+			CONSTRAINT furniture_pkey PRIMARY KEY(id)\
+			);",
 		SQL_NTS);
-	// создание таблиц тем
 	status = SQLExecDirect(hStat,
-		(SQLWCHAR*)L"create table if not exist theme (\
-		id_stud integer references student(id),\
-		id_tchr integer references teacher(id),\
-		name varchar(256)\
-		);",
+		(SQLWCHAR*)L"CREATE TABLE IF NOT EXISTS sale(\
+			id integer,\
+			contract_num integer,\
+			furniture_id integer,\
+			amount integer,\
+			CONSTRAINT sale_pkey PRIMARY KEY(id),\
+			CONSTRAINT sale_contract_num_fkey FOREIGN KEY(contract_num)\
+			REFERENCES contract(number) MATCH SIMPLE\
+			ON UPDATE NO ACTION\
+			ON DELETE CASCADE\
+			NOT VALID,\
+			CONSTRAINT sale_furniture_id_fkey FOREIGN KEY(furniture_id)\
+			REFERENCES furniture(id) MATCH SIMPLE\
+			ON UPDATE NO ACTION\
+			ON DELETE CASCADE\
+			NOT VALID\
+			);",
 		SQL_NTS);
 }
 

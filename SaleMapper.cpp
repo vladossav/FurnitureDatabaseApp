@@ -34,8 +34,8 @@ void SaleMapper::removeById(long id) {
 
 void SaleMapper::update(Sale& obj) {
 	char request[512];
-	snprintf(request, 512, "update sale set contract_num=%ld, furniture_id=%ld, amount=%ld;",
-		obj.getContractNum(), obj.getFurnitureId(), obj.getAmount());
+	snprintf(request, 512, "update sale set contract_num=%ld, furniture_id=%ld, amount=%ld where id = '%ld';",
+		obj.getContractNum(), obj.getFurnitureId(), obj.getAmount(),obj.getId());
 
 	try {
 		Database::getInstance()->execute(request);

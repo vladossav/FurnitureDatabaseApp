@@ -125,12 +125,9 @@ void saleAddMenu(SaleRepository& saleRepo, ContractRepository& contractRepo, Fur
 		else cout << "Договора с таким номером не существует!\n";
 	} while (flag);
 
-	long pos;
-	do {
-		show(furnRepo.getAllFurniture());
-		cout << "\nВыберите позицию мебели: ";
-		pos = getAndCheckInputInteger(furnRepo.getSize());
-	} while (flag);
+	show(furnRepo.getAllFurniture());
+	cout << "\nВыберите позицию мебели: ";
+	long pos = getAndCheckInputInteger(furnRepo.getSize());
 	Furniture furn = furnRepo.getByNum(pos);
 
 	cout << "Введите количество заказанной мебели: ";
@@ -174,13 +171,9 @@ void saleEditMenu(SaleRepository& saleRepo, ContractRepository& contractRepo, Fu
 			break;
 		}
 		case 2: {
-			bool flag = true;
-			long pos;
-			do {
-				show(furnRepo.getAllFurniture());
-				cout << "\nВыберите новую позицию мебели: ";
-				pos = getAndCheckInputInteger(furnRepo.getSize());
-			} while (flag);
+			show(furnRepo.getAllFurniture());
+			cout << "\nВыберите новую позицию мебели: ";
+			long pos = getAndCheckInputInteger(furnRepo.getSize());
 			Furniture furn = furnRepo.getByNum(pos);
 			sale.setFurniture(furn.getId(), furn.getName(), furn.getModel());
 			break;

@@ -12,7 +12,6 @@ public:
 	}
 
 	std::vector<Contract> getAllContracts();
-	Contract* getById(long id);
 	Contract& getByNum(long id);
 	long getSize();
 
@@ -20,7 +19,6 @@ public:
 	void updateContract(long id, Contract one);
 	void removeContractById(long id);
 	bool hasContractNumberCollision(long id);
-	long genAddressId();
 private:
 	std::vector<Contract> repo;
 	ContractMapper mapper;

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 
-
 class Customer {
 public:
 	static const std::string TABLE_NAME;
@@ -27,7 +26,6 @@ public:
 	void setPhoneNum(std::string phone);
 
 	std::vector<std::string> getStringLine();
-
 private:
 	long code;
 	std::string name;
